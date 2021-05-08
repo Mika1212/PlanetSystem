@@ -1,43 +1,33 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 
 public class PlanetSystem {
 
-    static int initX = 100;
-    static int initY = 100;
+    static double x = 375;
+    static double y = 475;
     static int numberOfPlanets = 8;
+    static double maxAngle = Math.PI * 2;
 
     public static void main(String[] args) throws InterruptedException {
         JFrame jFrame = getFrame();
         jFrame.add(new MyComponent());
 
-        int i = 0;
-        while (true) {
-            System.out.println("First");
-            Thread.sleep(500);
-            System.out.println("Second");
+        double angle = 0;
+        while (angle < maxAngle) {
 
-            i++;
-            if (i<2) {
-                initX += 100;
-                initY += 100;
-            }
+            double radius = Math.sqrt(Math.pow(500 - x, 2) + Math.pow(500 - y, 2));
+            angle+=0.01;
+            x = radius * Math.cos(angle);
+            y = radius * Math.sin(angle);
 
-            if (i>2) {
-                initX += 100;
-            }
+            System.out.println("radius = " + radius + "\n" + "x = " + x + " y = " + y);
 
-            if (i>5) {
 
-                initY += 100;
-            }
 
             jFrame.repaint();
+            Thread.sleep(50);
         }
 
     }
@@ -52,19 +42,26 @@ public class PlanetSystem {
             g2.fillRect(0, 0, 1000, 1000);
 
             g2.setPaint(Color.yellow);
-            Ellipse2D star = new Ellipse2D.Double(450, 425, 100, 100);
+            Ellipse2D star = new Ellipse2D.Double(450, 450, 100, 100);
             g2.fill(star);
 
             g2.setColor(Color.WHITE);
             for (int i = 0; i < numberOfPlanets; i++) {
-                Ellipse2D orbit = new Ellipse2D.Double(400 - i * 50, 375 - i * 50, 200 + i * 100, 200 + i * 100);
+                Ellipse2D orbit = new Ellipse2D.Double(400 - i * 50, 400 - i * 50, 200 + i * 100, 200 + i * 100);
                 g2.draw(orbit);
             }
 
+            Line2D line400 = new Line2D.Double(500, 0, 500, 1000);
+            g2.draw(line400);
+
+            Line2D line375 = new Line2D.Double(0,500, 1000, 500);
+            g2.draw(line375);
+
             g2.setColor(Color.blue);
 
-            Line2D line2D = new Line2D.Double(initX, initY, initX + 100, initY + 100);
-            g2.draw(line2D);
+            Ellipse2D planet = new Ellipse2D.Double(x, y, 50, 50);
+            g2.fill(planet);
+
         }
     }
 
