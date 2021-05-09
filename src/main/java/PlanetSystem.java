@@ -109,6 +109,7 @@ public class PlanetSystem {
         int i = 0;
         double[] checker = new double[6];
         while (true) {
+            jFrame.repaint();
             if (!pause[0]) {
                 int j = 0;
                 i++;
@@ -122,7 +123,7 @@ public class PlanetSystem {
 
                 Thread.sleep(speed[0]);
             }
-            jFrame.repaint();
+
         }
     }
 
@@ -162,6 +163,7 @@ public class PlanetSystem {
 
     static JFrame getFrame() {
         JFrame jFrame = new JFrame();
+        jFrame.setBackground(Color.LIGHT_GRAY);
         jFrame.setTitle("PlanetSystem Simulator");
         jFrame.toFront();
         jFrame.setVisible(true);
@@ -169,7 +171,7 @@ public class PlanetSystem {
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
-        jFrame.setBounds((dimension.width - 1000)/2 , (dimension.height - 1000)/3, 1450, 1000);
+        jFrame.setBounds((dimension.width - 1450)/2 , (dimension.height - 1000)/3, 1450, 1000);
         return jFrame;
 
     }
