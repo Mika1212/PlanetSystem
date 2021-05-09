@@ -1,12 +1,14 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PlanetSystem {
     static int numberOfPlanets = 6;
@@ -39,32 +41,88 @@ public class PlanetSystem {
     
     public static void main(String[] args) throws InterruptedException {
         JFrame jFrame = getFrame();
+
+        boolean[] pause = {false};
+        Button pauseButton = new Button("Pause");
+        pauseButton.setSize(110,30);
+        pauseButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                pause[0] = true;
+            }
+        });
+
+        Button playButton = new Button("Play");
+        playButton.setSize(110,30);
+        playButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                pause[0] = false;
+            }
+        });
+
+        int[] speed = {10};
+        Button speedX05 = new Button("Click to speed down");
+        speedX05.setSize(110,30);
+        speedX05.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (speed[0] < 100) speed[0] += 3;
+            }
+        });
+
+        Button speedX2 = new Button("Click to speed up");
+        speedX2.setSize(110,30);
+        speedX2.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (speed[0] > 10 ) speed[0] -= speed[0] / 10;
+                else if (speed[0] > 1) speed[0] -= 1;
+            }
+        });
+
+        Button speedNormal = new Button("Back to normal");
+        speedNormal.setSize(110,30);
+        speedNormal.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                speed[0] = 10;
+            }
+        });
+
+        pauseButton.setLocation(1270,100);
+        playButton.setLocation(1270,200);
+        speedX2.setLocation(1200,300);
+        speedX05.setLocation(1320,300);
+        speedNormal.setLocation(1270,340);
+
+        jFrame.add(pauseButton);
+        jFrame.add(playButton);
+        jFrame.add(speedX05);
+        jFrame.add(speedX2);
+        jFrame.add(speedNormal);
         jFrame.add(new MyComponent());
-        
 
-        Planet earth = new Planet(75, 150, 40, 1, Color.BLUE);
-        Planet planet2 = new Planet(150, 225, 50, 2, Color.ORANGE);
-        Planet planet3 = new Planet(225, 300, 50, 3, Color.PINK);
-        Planet planet4 = new Planet(300, 375, 50, 4, Color.CYAN);
-        Planet planet5 = new Planet(375, 450, 50, 5, Color.DARK_GRAY);
-        Planet planet6 = new Planet(450, 525, 50, 6, Color.GREEN);
+        allPlanets.add(new Planet(75, 150, 40, 1, Color.BLUE));
+        allPlanets.add(new Planet(150, 225, 50, 2, Color.ORANGE));
+        allPlanets.add( new Planet(225, 300, 50, 3, Color.PINK));
+        allPlanets.add(new Planet(300, 375, 50, 4, Color.CYAN));
+        allPlanets.add(new Planet(375, 450, 50, 5, Color.DARK_GRAY));
+        allPlanets.add(new Planet(450, 525, 50, 6, Color.GREEN));
 
-
-        allPlanets.add(earth);
-        allPlanets.add(planet2);
-        allPlanets.add(planet3);
-        allPlanets.add(planet4);
-        allPlanets.add(planet5);
-        allPlanets.add(planet6);
 
         int i = 0;
+        double[] checker = new double[6];
         while (true) {
-            i++;
-            for (Planet planet: allPlanets) coordinates(planet, i);
+            if (!pause[0]) {
+                int j = 0;
+                i++;
+                for (Planet planet : allPlanets) {
+                    coordinates(planet, i);
+                    checker[j] = planet.x;
+                    j++;
+                }
 
-            Thread.sleep(10);
+                if (Arrays.stream(checker).allMatch(number -> number == checker[0])) i = 0;
+
+                Thread.sleep(speed[0]);
+            }
             jFrame.repaint();
-
         }
     }
 
@@ -75,8 +133,6 @@ public class PlanetSystem {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            g2.setBackground(Color.blue);
-
             File file = new File("background2.jpg");
             BufferedImage image = null;
             try {
@@ -85,7 +141,6 @@ public class PlanetSystem {
                 e.printStackTrace();
             }
             g2.drawImage(image, null, 0 , 0);
-
 
             g2.setPaint(Color.yellow);
             Ellipse2D star = new Ellipse2D.Double(610, 435, 80, 80);
@@ -107,11 +162,15 @@ public class PlanetSystem {
 
     static JFrame getFrame() {
         JFrame jFrame = new JFrame();
+        jFrame.setTitle("PlanetSystem Simulator");
+        jFrame.toFront();
         jFrame.setVisible(true);
+        jFrame.setResizable(false);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
-        jFrame.setBounds((dimension.width - 1000)/2 , (dimension.height - 1000)/3, 1200, 1000);
+        jFrame.setBounds((dimension.width - 1000)/2 , (dimension.height - 1000)/3, 1450, 1000);
         return jFrame;
+
     }
 }
