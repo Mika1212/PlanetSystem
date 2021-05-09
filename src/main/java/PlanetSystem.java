@@ -13,7 +13,9 @@ import java.util.Arrays;
 public class PlanetSystem {
     static int numberOfPlanets = 6;
     static ArrayList<Planet> allPlanets = new ArrayList<>();
-    
+
+
+    //Class for all planets
     public static class Planet {
         double x;
         double y;
@@ -22,7 +24,7 @@ public class PlanetSystem {
         int size;
         int remoteness;
         Color color;
-        
+
         public Planet(int a, int b, int size, int remoteness, Color color) {
             this.a = a;
             this.b = b;
@@ -31,7 +33,8 @@ public class PlanetSystem {
             this.color = color;
         }
     }
-    
+
+    //Method to find coordinates x,y of a planet
     public static void coordinates(Planet planet, int i) {
             double psi = (i * Math.PI / 180 / planet.remoteness);
             double fi = Math.atan2(planet.a * Math.sin(psi), planet.b * Math.cos(psi));
@@ -42,6 +45,7 @@ public class PlanetSystem {
     public static void main(String[] args) throws InterruptedException {
         JFrame jFrame = getFrame();
 
+        //buttons
         boolean[] pause = {false};
         Button pauseButton = new Button("Pause");
         pauseButton.setSize(110,30);
@@ -98,14 +102,15 @@ public class PlanetSystem {
         jFrame.add(speedNormal);
         jFrame.add(new MyComponent());
 
+        //All planets (I can change it to .txt file)
         allPlanets.add(new Planet(75, 150, 40, 1, Color.BLUE));
         allPlanets.add(new Planet(150, 225, 50, 2, Color.ORANGE));
-        allPlanets.add( new Planet(225, 300, 50, 3, Color.PINK));
+        allPlanets.add(new Planet(225, 300, 50, 3, Color.PINK));
         allPlanets.add(new Planet(300, 375, 50, 4, Color.CYAN));
         allPlanets.add(new Planet(375, 450, 50, 5, Color.DARK_GRAY));
         allPlanets.add(new Planet(450, 525, 50, 6, Color.GREEN));
 
-
+        //Run of the process of painting
         int i = 0;
         double[] checker = new double[6];
         while (true) {
@@ -129,6 +134,7 @@ public class PlanetSystem {
 
     static class MyComponent extends JComponent {
 
+        //The painting
         @Override
         public void paint(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
@@ -161,6 +167,7 @@ public class PlanetSystem {
         }
     }
 
+    //Init method to create frame
     static JFrame getFrame() {
         JFrame jFrame = new JFrame();
         jFrame.setBackground(Color.LIGHT_GRAY);
