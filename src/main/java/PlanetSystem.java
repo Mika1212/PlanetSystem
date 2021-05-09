@@ -180,6 +180,5 @@ public class PlanetSystem {
         Dimension dimension = toolkit.getScreenSize();
         jFrame.setBounds((dimension.width - 1450)/2 , (dimension.height - 1000)/3, 1450, 1000);
         return jFrame;
-
     }
 }
