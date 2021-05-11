@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PlanetSystem {
-    static int numberOfPlanets = 6;
     static ArrayList<Planet> allPlanets = new ArrayList<>();
 
 
@@ -36,12 +35,12 @@ public class PlanetSystem {
 
     //Method to find coordinates x,y of a planet
     public static void coordinates(Planet planet, int i) {
-            double psi = (i * Math.PI / 180 / planet.remoteness);
-            double fi = Math.atan2(planet.a * Math.sin(psi), planet.b * Math.cos(psi));
-            planet.y = planet.a * Math.cos(fi) + 455;
-            planet.x = planet.b * Math.sin(fi) + 580;
+        double psi = (i * Math.PI / 180 / planet.remoteness);
+        double fi = Math.atan2(planet.a * Math.sin(psi), planet.b * Math.cos(psi));
+        planet.y = planet.a * Math.cos(fi) + 455;
+        planet.x = planet.b * Math.sin(fi) + 580;
     }
-    
+
     public static void main(String[] args) throws InterruptedException {
         JFrame jFrame = getFrame();
         int[] speed = {10};
@@ -153,7 +152,7 @@ public class PlanetSystem {
             g2.fill(star);
 
             g2.setColor(Color.WHITE);
-            for (int i = 0; i < numberOfPlanets; i++) {
+            for (int i = 0; i < allPlanets.size(); i++) {
                 Ellipse2D orbit = new Ellipse2D.Double(450 - i * 75, 400 - i *75, 300 + i * 150, 150 + i * 150);
                 g2.draw(orbit);
             }
