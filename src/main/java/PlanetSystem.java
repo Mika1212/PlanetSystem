@@ -43,7 +43,6 @@ public class PlanetSystem {
 
     public static void main(String[] args) throws InterruptedException {
         JFrame jFrame = getFrame();
-        int[] speed = {10};
 
         //buttons
         boolean[] pause = {false};
@@ -63,6 +62,7 @@ public class PlanetSystem {
             }
         });
 
+        int[] speed = {10};
         Button speedX05 = new Button("Click to speed down");
         speedX05.setSize(110,30);
         speedX05.addActionListener(new ActionListener(){
