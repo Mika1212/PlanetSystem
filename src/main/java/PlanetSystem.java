@@ -21,10 +21,10 @@ public class PlanetSystem {
 
     //Method to find coordinates x,y of a planet
     public static void coordinates(SpaceObjects.Planet planet, int i) {
-        double psi = (i * Math.PI / 180 );
+        double psi = (i * Math.PI / 180 / planet.remoteness);
         double fi = Math.atan2(planet.a * Math.sin(psi), planet.b * Math.cos(psi));
-        planet.y = planet.a * Math.cos(fi) + 450;
-        planet.x = planet.b * Math.sin(fi) + 510;
+        planet.y = planet.a * Math.cos(fi) + 455;
+        planet.x = planet.b * Math.sin(fi) + 580;
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -168,10 +168,6 @@ public class PlanetSystem {
         allPlanets.add(new SpaceObjects.Planet(300, 375, 50, 4, Color.CYAN));
         allPlanets.add(new SpaceObjects.Planet(375, 450, 50, 5, Color.DARK_GRAY));
         allPlanets.add(new SpaceObjects.Planet(450, 525, 50, 6, Color.GREEN));
-        allPlanets.add(new SpaceObjects.Planet(525, 600, 50, 7, Color.LIGHT_GRAY));
-
-
-
 
         //Run of the process of painting
         int i = 0;
@@ -226,33 +222,19 @@ public class PlanetSystem {
             for (int i = 0; i < horizontalChange; i++) right(g2);
             for (int i = 0; i < verticalChange; i++) down(g2);
 
-            g2.setColor(star.color);
-            Ellipse2D paintOfStar = new Ellipse2D.Double(star.x, star.y, star.size, star.size);
-            g2.fill(paintOfStar);
+            g2.setPaint(Color.yellow);
+            Ellipse2D star = new Ellipse2D.Double(610, 435, 80, 80);
+            g2.fill(star);
 
             g2.setColor(Color.WHITE);
-            double x = star.x - star.size * 2;
-            double y = star.y - star.size / 3 ;
-            double height = star.size * 1.5;
-            double width = star.size * 3;
             for (int i = 0; i < allPlanets.size(); i++) {
-                x -= allPlanets.get(i).size / 1.5;
-                y -= allPlanets.get(i).size / 1.5;
-                height += allPlanets.get(i).size * 1.3;
-                width += allPlanets.get(i).size * 1.5;
-
-                Ellipse2D orbit = new Ellipse2D.Double(x, y, width, height);
+                Ellipse2D orbit = new Ellipse2D.Double(450 - i * 75, 400 - i * 75, 300 + i * 150, 150 + i * 150);
                 g2.draw(orbit);
-
-                x -= allPlanets.get(i).size / 1.5;
-                y -= allPlanets.get(i).size / 1.5;
-                height += allPlanets.get(i).size * 1.3 ;
-                width += allPlanets.get(i).size * 1.5;
             }
 
             for (SpaceObjects.Planet planet: allPlanets) {
                 g2.setColor(planet.color);
-                Ellipse2D planetToDraw = new Ellipse2D.Double(planet.x + planet.size / 2, planet.y + planet.size / 2, planet.size, planet.size);
+                Ellipse2D planetToDraw = new Ellipse2D.Double(planet.x, planet.y, planet.size, planet.size);
                 g2.fill(planetToDraw);
             }
         }

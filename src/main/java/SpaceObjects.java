@@ -26,16 +26,8 @@ public class SpaceObjects {
         Color color;
 
         public Planet(int a, int b, int size, int remoteness, Color color) {
-            if (PlanetSystem.allPlanets.size() == 0) {
-                this.a = a;
-                this.b = b;
-            } else {
-                this.a = PlanetSystem.allPlanets.get(PlanetSystem.allPlanets.size() - 1).a + size / 2 +
-                        PlanetSystem.allPlanets.get(PlanetSystem.allPlanets.size() - 1).size / 2;
-                this.b = (int) (PlanetSystem.allPlanets.get(PlanetSystem.allPlanets.size() - 1).b + size / 1.5 +
-                                        PlanetSystem.allPlanets.get(PlanetSystem.allPlanets.size() - 1).size / 1.5);
-            }
-
+            this.a = a;
+            this.b = b;
             this.size = size;
             this.remoteness = remoteness;
             this.color = color;
