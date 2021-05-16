@@ -23,6 +23,8 @@ public class SpaceObjects {
         int b;
         int size;
         int remoteness;
+        double time;
+        double speedDivider;
         Color color;
 
         public Planet(int a, int b, int size, int remoteness, Color color) {
@@ -30,6 +32,8 @@ public class SpaceObjects {
             this.b = b;
             this.size = size;
             this.remoteness = remoteness;
+            this.speedDivider = 1;
+            this.time = 0;
             this.color = color;
         }
     }

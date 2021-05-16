@@ -1,5 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PlanetSystem {
     static ArrayList<SpaceObjects.Planet> allPlanets = new ArrayList<>();
@@ -19,11 +20,74 @@ public class PlanetSystem {
 
 
     //Method to find coordinates x,y of a planet
-    public static void coordinates(SpaceObjects.Planet planet, int i) {
-        double psi = (i * Math.PI / 180 / planet.remoteness);
+    private static void coordinates(SpaceObjects.Planet planet) {
+        double psi = (planet.time * Math.PI / 180 / planet.remoteness);
         double fi = Math.atan2(planet.a * Math.sin(psi), planet.b * Math.cos(psi));
         planet.y = planet.a * Math.cos(fi) + 450 - planet.size / 2 + 25;
         planet.x = planet.b * Math.sin(fi) + 575 - planet.size / 2 + 25;
+    }
+
+    //customization of the planets
+    private static void launchCustomization() {
+        JFrame frame = new JFrame();
+        frame.setTitle("Planet customisation");
+        frame.toFront();
+        frame.setVisible(true);
+        frame.setResizable(false);
+        frame.setBounds(985, 50, 700, 300);
+
+        frame.setLayout(new FlowLayout(FlowLayout.LEFT, 10 , 10));
+
+        Label firstPlanetLabel = new Label("Planet # 1");
+        Label secondPlanetLabel = new Label("Planet # 2");
+        Label ThirdPlanetLabel = new Label("Planet # 3");
+        Label fourthPlanetLabel = new Label("Planet # 4");
+        Label fifthPlanetLabel = new Label("Planet # 5");
+        Label sixthPlanetLabel = new Label("Planet # 6");
+        Label sizeLabel = new Label("Size:");
+        Label speedOfThePlanetLabel = new Label("Speed:");
+
+        JSlider firstPlanetSliderOfSize = new JSlider(JSlider.HORIZONTAL, 1, 51, 2);{
+            firstPlanetSliderOfSize.setMajorTickSpacing(10);
+            firstPlanetSliderOfSize.setMinorTickSpacing(1);
+            firstPlanetSliderOfSize.setPaintTicks(true);
+            firstPlanetSliderOfSize.setPaintLabels(true);
+            firstPlanetSliderOfSize.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    JSlider source = (JSlider) e.getSource();
+                    if (!source.getValueIsAdjusting()) {
+                        allPlanets.get(0).size = source.getValue();
+                    }
+                }
+            });
+        }
+
+        JSlider firstPlanetSliderOfSpeed = new JSlider(JSlider.HORIZONTAL, -100, 100, 5);{
+            firstPlanetSliderOfSpeed.setMajorTickSpacing(50);
+            firstPlanetSliderOfSpeed.setMinorTickSpacing(1);
+            firstPlanetSliderOfSpeed.setValue(0);
+            firstPlanetSliderOfSpeed.setPaintTicks(true);
+            firstPlanetSliderOfSpeed.setPaintLabels(true);
+            firstPlanetSliderOfSpeed.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    JSlider source = (JSlider) e.getSource();
+                    if (!source.getValueIsAdjusting()) allPlanets.get(0).speedDivider = ((101 - source.getValue()) / 40.0);
+
+                }
+            });
+        }
+
+
+        frame.add(firstPlanetLabel);
+        frame.add(sizeLabel);
+        frame.add(firstPlanetSliderOfSize);
+        frame.add(speedOfThePlanetLabel);
+        frame.add(firstPlanetSliderOfSpeed);
+
+        frame.add(secondPlanetLabel);
+
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -71,6 +135,9 @@ public class PlanetSystem {
         speedNormal.setBounds(70, 240, 110,30);
         speedNormal.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
+                for (SpaceObjects.Planet planet: allPlanets) {
+                    planet.speedDivider = 1;
+                }
                 speed[0] = 10;
             }
         });
@@ -109,7 +176,7 @@ public class PlanetSystem {
         leftButton.setBounds(10, 520, 110,30);
         leftButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                if (pointOfView[2] - 100 > 0) {
+                if (pointOfView[0] - 100 >= 0) {
                     horizontalChange -= 1;
                 }
             }
@@ -119,7 +186,7 @@ public class PlanetSystem {
         upButton.setBounds(70, 480, 110,30);
         upButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                if (pointOfView[1] - 100 > 0) {
+                if (pointOfView[1] - 100 >= 0) {
                     verticalChange -= 1;
                 }
             }
@@ -135,6 +202,15 @@ public class PlanetSystem {
             }
         });
 
+        Button customization = new Button("Customization");
+        customization.setBounds(70, 700, 110,30);
+        customization.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                launchCustomization();
+            }
+        });
+
+
         buttons.add(pauseButton);
         buttons.add(speedX05);
         buttons.add(speedX2);
@@ -146,6 +222,7 @@ public class PlanetSystem {
         buttons.add(leftButton);
         buttons.add(upButton);
         buttons.add(downButton);
+        buttons.add(customization);
 
         Thread.sleep(100);
         jFrame.add(buttons);
@@ -160,12 +237,14 @@ public class PlanetSystem {
         allPlanets.add(new SpaceObjects.Planet(450, 525, 50, 6, Color.GREEN));
 
         //Run of the process of painting
-        int i = 0;
         while (true) {
 
             if (!pause[0]) {
-                i++;
-                for (SpaceObjects.Planet planet : allPlanets) coordinates(planet, i);
+
+                for (SpaceObjects.Planet planet : allPlanets) {
+                    coordinates(planet);
+                    planet.time += planet.speedDivider;
+                }
 
                 Thread.sleep(speed[0]);
             }
@@ -174,6 +253,7 @@ public class PlanetSystem {
     }
 
     static class MyComponent extends JComponent {
+
 
         private void scaleUp(Graphics2D g2) {
             g2.scale(2, 2);
@@ -206,6 +286,11 @@ public class PlanetSystem {
                 e.printStackTrace();
             }
             g2.drawImage(image, null, 0 , 0);
+
+            pointOfView[0] = 0;
+            pointOfView[1] = 0;
+            pointOfView[2] = 1200;
+            pointOfView[3] = 1000;
 
             for (int i = 0; i < scaleChange; i++) scaleUp(g2);
             for (int i = 0; i < horizontalChange; i++) right(g2);
