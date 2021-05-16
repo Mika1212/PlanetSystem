@@ -49,7 +49,6 @@ public class PlanetSystem {
             }
         });
 
-
         int[] speed = {10};
         Button speedX05 = new Button("Slower");
         speedX05.setBounds(10, 200, 110,30);
@@ -100,7 +99,7 @@ public class PlanetSystem {
         rightButton.setBounds(130, 520, 110,30);
         rightButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                if (pointOfView[2] + 100 <= 800) {
+                if (pointOfView[2] + 100 <= 1200) {
                     horizontalChange += 1;
                 }
             }
@@ -153,12 +152,12 @@ public class PlanetSystem {
 
 
         //All planets (I can change it to .txt file)
-        allPlanets.add(new SpaceObjects.Planet(75, 150, 50, 1, Color.BLUE));
+        allPlanets.add(new SpaceObjects.Planet(75, 150, 10, 1, Color.BLUE));
         allPlanets.add(new SpaceObjects.Planet(150, 225, 20, 2, Color.ORANGE));
         allPlanets.add(new SpaceObjects.Planet(225, 300, 30, 3, Color.PINK));
         allPlanets.add(new SpaceObjects.Planet(300, 375, 40, 4, Color.CYAN));
         allPlanets.add(new SpaceObjects.Planet(375, 450, 50, 5, Color.DARK_GRAY));
-        allPlanets.add(new SpaceObjects.Planet(450, 525, 60, 6, Color.GREEN));
+        allPlanets.add(new SpaceObjects.Planet(450, 525, 50, 6, Color.GREEN));
 
         //Run of the process of painting
         int i = 0;
