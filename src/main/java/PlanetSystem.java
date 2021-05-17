@@ -473,7 +473,7 @@ public class PlanetSystem {
             g2.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
             g2.drawString("Time from the start: " + systemTimeYears + " years, " + systemTimeMonths + " months",15, 20);
-            g2.drawString("Ratio: 1 to 20 000", 15, 45);
+            g2.drawString("Ratio: 1 to 20 000 km", 15, 45);
 
 
             pointOfView[0] = 0;
