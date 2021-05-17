@@ -13,24 +13,28 @@ import java.util.ArrayList;
 
 public class PlanetSystem {
     static ArrayList<SpaceObjects.Planet> allPlanets = new ArrayList<>();
-    static int[] pointOfView = {0, 0, 1400, 1000};
-    static int scaleChange = 0;
-    static int horizontalChange = 0;
-    static int verticalChange = 0;
-    static boolean[] pause = {false};
-    static int[] speed = {10};
-    static boolean[] start = {false};
+    private static int[] pointOfView = {0, 0, 1400, 1000};
+    private static int scaleChange = 0;
+    private static int horizontalChange = 0;
+    private static int verticalChange = 0;
+    private static boolean[] pause = {false};
+    private static int[] speed = {10};
+    private static boolean[] start = {false};
+    private static int systemTimeDays = 0;
+    private static int systemTimeMonths = 0;
+    private static int systemTimeYears = 0;
 
-
+    //Add 6 standard planets
     private static void addStandardPlanets(){
         addPlanet(new SpaceObjects.Planet(10, 1, Color.BLUE));
         addPlanet(new SpaceObjects.Planet(20, 2, Color.ORANGE));
         addPlanet(new SpaceObjects.Planet(30, 3, Color.PINK));
         addPlanet(new SpaceObjects.Planet(40, 4, Color.CYAN));
-        addPlanet(new SpaceObjects.Planet(50, 5, Color.DARK_GRAY));
+        addPlanet(new SpaceObjects.Planet(45, 5, Color.DARK_GRAY));
         addPlanet(new SpaceObjects.Planet(50, 6, Color.GREEN));
     }
 
+    //Add 1 planet
     public static void addPlanet(SpaceObjects.Planet planet) {
         allPlanets.add(planet);
     }
@@ -244,11 +248,22 @@ public class PlanetSystem {
         }
     }
 
-    //Run of the process of painting
+    //Run of the process
     private static void launchApplication(JFrame jFrame) throws InterruptedException {
         while (true) {
 
             if (!pause[0]) {
+
+                if (systemTimeDays == 30) {
+                    systemTimeMonths++;
+                    systemTimeDays = 0;
+                }
+                if (systemTimeMonths == 12) {
+                    systemTimeYears++;
+                    systemTimeMonths = 0;
+                }
+
+                systemTimeDays++;
 
                 for (SpaceObjects.Planet planet : allPlanets) {
                     coordinates(planet);
@@ -263,21 +278,20 @@ public class PlanetSystem {
 
     public static void main(String[] args) throws InterruptedException {
         JFrame jFrame = getFrame();
-        JPanel buttons = new JPanel();
 
+        JPanel buttons = new JPanel();
         buttons.setLocation(new Point(1200, 0));
         buttons.setSize(250, 1000);
         buttons.setVisible(true);
 
         jFrame.add(new MyComponent());
 
-
         //buttons
         Button pauseButton = new Button("Play/Pause");
         pauseButton.setBounds(70, 150, 110,30);
         pauseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (pause[0])
+                if (pause[0] && start[0])
                 pause[0] = false;
                 else pause[0] = true;
             }
@@ -391,6 +405,9 @@ public class PlanetSystem {
                     start[0] = false;
                     speed[0] = 10;
                     pause[0] = true;
+                    systemTimeDays = 0;
+                    systemTimeMonths = 0;
+                    systemTimeYears = 0;
                     allPlanets.clear();
                 }
             }
@@ -411,7 +428,7 @@ public class PlanetSystem {
         buttons.add(downButton);
         buttons.add(customization);
 
-        Thread.sleep(100);
+        Thread.sleep(300);
         jFrame.add(buttons);
 
         launchApplication(jFrame);
@@ -453,11 +470,16 @@ public class PlanetSystem {
             }
             g2.drawImage(image, null, 0 , 0);
 
+            g2.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+            g2.drawString("Time from the start: " + systemTimeYears + " years, " + systemTimeMonths + " months",15, 20);
+            g2.drawString("Ratio: 1 to 20 000", 15, 45);
+
+
             pointOfView[0] = 0;
             pointOfView[1] = 0;
             pointOfView[2] = 1200;
             pointOfView[3] = 1000;
-
             for (int i = 0; i < scaleChange; i++) scaleUp(g2);
             for (int i = 0; i < horizontalChange; i++) right(g2);
             for (int i = 0; i < verticalChange; i++) down(g2);
