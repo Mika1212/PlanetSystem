@@ -253,18 +253,18 @@ public class PlanetSystem {
         while (true) {
 
             if (!pause[0]) {
+                if (start[0]) {
+                    if (systemTimeDays == 30) {
+                        systemTimeMonths++;
+                        systemTimeDays = 0;
+                    }
+                    if (systemTimeMonths == 12) {
+                        systemTimeYears++;
+                        systemTimeMonths = 0;
+                    }
 
-                if (systemTimeDays == 30) {
-                    systemTimeMonths++;
-                    systemTimeDays = 0;
+                    systemTimeDays++;
                 }
-                if (systemTimeMonths == 12) {
-                    systemTimeYears++;
-                    systemTimeMonths = 0;
-                }
-
-                systemTimeDays++;
-
                 for (SpaceObjects.Planet planet : allPlanets) {
                     coordinates(planet);
                     planet.time += planet.speedDivider;
@@ -435,7 +435,7 @@ public class PlanetSystem {
     }
 
     //Everything connected to painting
-    static class MyComponent extends JComponent {
+    private static class MyComponent extends JComponent {
 
         //Command methods
         private void scaleUp(Graphics2D g2) {
@@ -494,7 +494,11 @@ public class PlanetSystem {
                 g2.draw(orbit);
             }
 
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 14));
             for (SpaceObjects.Planet planet: allPlanets) {
+                g2.setColor(Color.WHITE);
+                g2.drawString("(" + (int) (planet.x + planet.size / 2)  + ", " + (int) (planet.y + planet.size / 2) + ")",
+                        (int) planet.x, (int) planet.y);
                 g2.setColor(planet.color);
                 Ellipse2D planetToDraw = new Ellipse2D.Double(planet.x, planet.y, planet.size, planet.size);
                 g2.fill(planetToDraw);
@@ -503,7 +507,7 @@ public class PlanetSystem {
     }
 
     //Init method to create frame
-    static JFrame getFrame() {
+    private static JFrame getFrame() {
         JFrame jFrame = new JFrame();
         jFrame.setTitle("PlanetSystem Simulator");
         jFrame.toFront();
