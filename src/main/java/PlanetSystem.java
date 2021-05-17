@@ -43,23 +43,24 @@ public class PlanetSystem {
         planet.x = planet.b * Math.sin(fi) + 575 - planet.size / 2 + 25;
     }
 
-    //customization of the planets
+    //Customization of the planets
     private static void launchCustomization() {
         JFrame frame = new JFrame();
         frame.setTitle("Planet customisation");
         frame.toFront();
         frame.setVisible(true);
         frame.setResizable(false);
-        frame.setBounds(985, 50, 700, 400);
+        frame.setBounds(965, 50, 720, 370);
 
         frame.setLayout(new FlowLayout(FlowLayout.LEFT, 10 , 10));
 
         for (int i = 0; i < allPlanets.size(); i++) {
             int finalI = i;
 
-            Label planetLabel = new Label("Planet # " + (finalI + 1));
+            Label nameLabel = new Label("Planet # " + (finalI + 1));
             Label sizeLabel = new Label("Size:");
-            Label speedOfThePlanetLabel = new Label("Speed:");
+            Label speedLabel = new Label("Speed:");
+            Label colorLabel = new Label("Color:");
 
             JSlider planetSliderOfSize = new JSlider(JSlider.HORIZONTAL, 1, 51, 2);
             {
@@ -97,13 +98,149 @@ public class PlanetSystem {
                 });
             }
 
+            Button colorButton = new Button();
+            colorButton.setBackground(allPlanets.get(i).color);
+            colorButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    JFrame frame = new JFrame();
+                    frame.setTitle("Planet color");
+                    frame.toFront();
+                    frame.setVisible(true);
+                    frame.setResizable(false);
+                    frame.setBounds(1670, 100, 175, 120);
+                    frame.setLayout(new FlowLayout(FlowLayout.LEFT, 10 , 10));
+
+                    Button whiteButton = new Button();
+                    whiteButton.setBackground(Color.WHITE);
+                    whiteButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.WHITE;
+                            colorButton.setBackground(Color.WHITE);
+                        }
+                    });
+
+                    Button blackButton = new Button();
+                    blackButton.setBackground(Color.BLACK);
+                    blackButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.BLACK;
+                            colorButton.setBackground(Color.BLACK);
+                        }
+                    });
+
+                    Button cyanButton = new Button();
+                    cyanButton.setBackground(Color.CYAN);
+                    cyanButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.CYAN;
+                            colorButton.setBackground(Color.CYAN);
+                        }
+                    });
+
+                    Button pinkButton = new Button();
+                    pinkButton.setBackground(Color.PINK);
+                    pinkButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.PINK;
+                            colorButton.setBackground(Color.PINK);
+                        }
+                    });
+
+                    Button darkGreyButton = new Button();
+                    darkGreyButton.setBackground(Color.DARK_GRAY);
+                    darkGreyButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.DARK_GRAY;
+                            colorButton.setBackground(Color.DARK_GRAY);
+                        }
+                    });
+
+                    Button lightGrayButton = new Button();
+                    lightGrayButton.setBackground(Color.LIGHT_GRAY);
+                    lightGrayButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.LIGHT_GRAY;
+                            colorButton.setBackground(Color.LIGHT_GRAY);
+                        }
+                    });
+
+                    Button magentaButton = new Button();
+                    magentaButton.setBackground(Color.MAGENTA);
+                    magentaButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.MAGENTA;
+                            colorButton.setBackground(Color.MAGENTA);
+                        }
+                    });
+
+                    Button greenButton = new Button();
+                    greenButton.setBackground(Color.GREEN);
+                    greenButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.GREEN;
+                            colorButton.setBackground(Color.GREEN);
+                        }
+                    });
+
+                    Button yellowButton = new Button();
+                    yellowButton.setBackground(Color.YELLOW);
+                    yellowButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.YELLOW;
+                            colorButton.setBackground(Color.YELLOW);
+                        }
+                    });
+
+                    Button blueButton = new Button();
+                    blueButton.setBackground(Color.BLUE);
+                    blueButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.BLUE;
+                            colorButton.setBackground(Color.BLUE);
+                        }
+                    });
+
+                    Button orangeButton = new Button();
+                    orangeButton.setBackground(Color.ORANGE);
+                    orangeButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.ORANGE;
+                            colorButton.setBackground(Color.ORANGE);
+                        }
+                    });
+
+                    Button redButton = new Button();
+                    redButton.setBackground(Color.RED);
+                    redButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            allPlanets.get(finalI).color = Color.RED;
+                            colorButton.setBackground(Color.RED);
+                        }
+                    });
+
+                    frame.add(whiteButton);
+                    frame.add(blackButton);
+                    frame.add(cyanButton);
+                    frame.add(pinkButton);
+                    frame.add(darkGreyButton);
+                    frame.add(lightGrayButton);
+                    frame.add(magentaButton);
+                    frame.add(greenButton);
+                    frame.add(yellowButton);
+                    frame.add(blueButton);
+                    frame.add(orangeButton);
+                    frame.add(redButton);
+                }
+            });
 
 
-            frame.add(planetLabel);
+            frame.add(nameLabel);
             frame.add(sizeLabel);
             frame.add(planetSliderOfSize);
-            frame.add(speedOfThePlanetLabel);
+            frame.add(speedLabel);
             frame.add(planetSliderOfSpeed);
+            frame.add(colorLabel);
+            frame.add(colorButton);
         }
     }
 
@@ -248,9 +385,12 @@ public class PlanetSystem {
             public void actionPerformed(ActionEvent e){
                 if (!start[0]) {
                     start[0] = true;
+                    pause[0] = false;
                     addStandardPlanets();
                 } else {
                     start[0] = false;
+                    speed[0] = 10;
+                    pause[0] = true;
                     allPlanets.clear();
                 }
             }
@@ -277,9 +417,10 @@ public class PlanetSystem {
         launchApplication(jFrame);
     }
 
+    //Everything connected to painting
     static class MyComponent extends JComponent {
 
-
+        //Command methods
         private void scaleUp(Graphics2D g2) {
             g2.scale(2, 2);
             for (int i = 0; i < pointOfView.length; i++) {
