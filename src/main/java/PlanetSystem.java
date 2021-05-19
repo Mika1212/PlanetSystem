@@ -23,7 +23,6 @@ public class PlanetSystem {
     private static int systemTimeDays = 0;
     private static int systemTimeMonths = 0;
     private static int systemTimeYears = 0;
-    int a = 0;
 
     public static void main(String[] args) throws InterruptedException {
        main();
