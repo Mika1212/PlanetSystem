@@ -17,8 +17,8 @@ public class SpaceObjects {
     }
 
     public static class Planet {
-        public static final int constA = 75;
-        public static final int constB = 150;
+        private static final int constA = 75;
+        private static final int constB = 150;
 
         double x;
         double y;

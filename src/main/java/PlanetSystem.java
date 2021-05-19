@@ -13,16 +13,181 @@ import java.util.ArrayList;
 
 public class PlanetSystem {
     static ArrayList<SpaceObjects.Planet> allPlanets = new ArrayList<>();
-    private static int[] pointOfView = {0, 0, 1400, 1000};
-    private static int scaleChange = 0;
-    private static int horizontalChange = 0;
-    private static int verticalChange = 0;
-    private static boolean[] pause = {false};
-    private static int[] speed = {10};
-    private static boolean[] start = {false};
+    public static int[] pointOfView = {0, 0, 1400, 1000};
+    public static int scaleChange = 0;
+    public static int horizontalChange = 0;
+    public static int verticalChange = 0;
+    public static boolean[] pause = {false};
+    public static int[] speed = {10};
+    public static boolean[] start = {false};
     private static int systemTimeDays = 0;
     private static int systemTimeMonths = 0;
     private static int systemTimeYears = 0;
+
+    public static void main(String[] args) throws InterruptedException {
+       main();
+    }
+
+    public static void main() throws InterruptedException {
+        JFrame jFrame = getFrame();
+
+        JPanel buttons = new JPanel();
+        buttons.setLocation(new Point(1200, 0));
+        buttons.setSize(250, 1000);
+        buttons.setVisible(true);
+
+        jFrame.add(new MyComponent());
+
+        //buttons
+        Button pauseButton = new Button("Play/Pause");
+        pauseButton.setBounds(70, 150, 110,30);
+        pauseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (pause[0] && start[0])
+                    pause[0] = false;
+                else pause[0] = true;
+            }
+        });
+
+        Button speedX05 = new Button("Slower");
+        speedX05.setBounds(10, 200, 110,30);
+        speedX05.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (speed[0] < 100) speed[0] += 3;
+            }
+        });
+
+        Button speedX2 = new Button("Faster");
+        speedX2.setBounds(130, 200,110,30);
+        speedX2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (speed[0] > 10 ) speed[0] -= speed[0] / 10;
+                else if (speed[0] > 1) speed[0] -= 1;
+            }
+        });
+
+        Button backToNormalButton = new Button("Back to normal");
+        backToNormalButton.setBounds(70, 300, 110,30);
+        backToNormalButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                for (SpaceObjects.Planet planet: allPlanets) {
+                    planet.speedDivider = 1;
+                }
+                verticalChange = 0;
+                horizontalChange = 0;
+                scaleChange = 0;
+                speed[0] = 10;
+            }
+        });
+
+        Button scaleUpButton = new Button("ScaleUp");
+        scaleUpButton.setBounds(10, 400, 110,30);
+        scaleUpButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                scaleChange += 1;
+            }
+        });
+
+        Button scaleDownButton = new Button("ScaleDown");
+        scaleDownButton.setBounds(130, 400, 110,30);
+        scaleDownButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                if (scaleChange == 1) {
+                    scaleChange = 0;
+                    horizontalChange = 0;
+                    verticalChange = 0;
+                } else if (scaleChange > 0) scaleChange -= 1;
+            }
+        });
+
+        Button rightButton = new Button("Move right");
+        rightButton.setBounds(130, 520, 110,30);
+        rightButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (pointOfView[2] + 100 <= 1200) {
+                    horizontalChange += 1;
+                }
+            }
+        });
+
+        Button leftButton = new Button("Move left");
+        leftButton.setBounds(10, 520, 110,30);
+        leftButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (pointOfView[0] - 100 >= 0) {
+                    horizontalChange -= 1;
+                }
+            }
+        });
+
+        Button upButton = new Button("Move up");
+        upButton.setBounds(70, 480, 110,30);
+        upButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (pointOfView[1] - 100 >= 0) {
+                    verticalChange -= 1;
+                }
+            }
+        });
+
+        Button downButton = new Button("Move down");
+        downButton.setBounds(70, 560, 110,30);
+        downButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (pointOfView[3] + 100 <= 1000) {
+                    verticalChange += 1;
+                }
+            }
+        });
+
+        Button customization = new Button("Customization");
+        customization.setBounds(70, 700, 110,30);
+        customization.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                launchCustomization();
+            }
+        });
+
+        Button startButton = new Button("Start/Delete");
+        startButton.setBounds(70, 70, 110,30);
+        startButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (!start[0]) {
+                    start[0] = true;
+                    pause[0] = false;
+                    addStandardPlanets();
+                } else {
+                    start[0] = false;
+                    speed[0] = 10;
+                    pause[0] = true;
+                    systemTimeDays = 0;
+                    systemTimeMonths = 0;
+                    systemTimeYears = 0;
+                    allPlanets.clear();
+                }
+            }
+        });
+
+        buttons.add(startButton);
+
+        buttons.add(pauseButton);
+        buttons.add(speedX05);
+        buttons.add(speedX2);
+        buttons.add(backToNormalButton);
+
+        buttons.add(scaleDownButton);
+        buttons.add(scaleUpButton);
+        buttons.add(rightButton);
+        buttons.add(leftButton);
+        buttons.add(upButton);
+        buttons.add(downButton);
+        buttons.add(customization);
+
+        Thread.sleep(300);
+        jFrame.add(buttons);
+
+        launchApplication(jFrame);
+    }
 
     //Add 6 standard planets
     private static void addStandardPlanets(){
@@ -40,7 +205,7 @@ public class PlanetSystem {
     }
 
     //Method to find coordinates x,y of a planet
-    private static void coordinates(SpaceObjects.Planet planet) {
+    public static void coordinates(SpaceObjects.Planet planet) {
         double psi = (planet.time * Math.PI / 180 / planet.remoteness);
         double fi = Math.atan2(planet.a * Math.sin(psi), planet.b * Math.cos(psi));
         planet.y = planet.a * Math.cos(fi) + 450 - planet.size / 2 + 25;
@@ -274,164 +439,6 @@ public class PlanetSystem {
             }
             jFrame.repaint(0, 0, 1210, 1000);
         }
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        JFrame jFrame = getFrame();
-
-        JPanel buttons = new JPanel();
-        buttons.setLocation(new Point(1200, 0));
-        buttons.setSize(250, 1000);
-        buttons.setVisible(true);
-
-        jFrame.add(new MyComponent());
-
-        //buttons
-        Button pauseButton = new Button("Play/Pause");
-        pauseButton.setBounds(70, 150, 110,30);
-        pauseButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (pause[0] && start[0])
-                pause[0] = false;
-                else pause[0] = true;
-            }
-        });
-
-        Button speedX05 = new Button("Slower");
-        speedX05.setBounds(10, 200, 110,30);
-        speedX05.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (speed[0] < 100) speed[0] += 3;
-            }
-        });
-
-        Button speedX2 = new Button("Faster");
-        speedX2.setBounds(130, 200,110,30);
-        speedX2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (speed[0] > 10 ) speed[0] -= speed[0] / 10;
-                else if (speed[0] > 1) speed[0] -= 1;
-            }
-        });
-
-        Button speedNormal = new Button("Normal speed");
-        speedNormal.setBounds(70, 240, 110,30);
-        speedNormal.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                for (SpaceObjects.Planet planet: allPlanets) {
-                    planet.speedDivider = 1;
-                }
-                speed[0] = 10;
-            }
-        });
-
-        Button scaleUpButton = new Button("ScaleUp");
-        scaleUpButton.setBounds(10, 400, 110,30);
-        scaleUpButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                scaleChange += 1;
-            }
-        });
-
-        Button scaleDownButton = new Button("ScaleDown");
-        scaleDownButton.setBounds(130, 400, 110,30);
-        scaleDownButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                if (scaleChange == 1) {
-                    scaleChange = 0;
-                    horizontalChange = 0;
-                    verticalChange = 0;
-                } else if (scaleChange > 0) scaleChange -= 1;
-            }
-        });
-
-        Button rightButton = new Button("Move right");
-        rightButton.setBounds(130, 520, 110,30);
-        rightButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                if (pointOfView[2] + 100 <= 1200) {
-                    horizontalChange += 1;
-                }
-            }
-        });
-
-        Button leftButton = new Button("Move left");
-        leftButton.setBounds(10, 520, 110,30);
-        leftButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                if (pointOfView[0] - 100 >= 0) {
-                    horizontalChange -= 1;
-                }
-            }
-        });
-
-        Button upButton = new Button("Move up");
-        upButton.setBounds(70, 480, 110,30);
-        upButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                if (pointOfView[1] - 100 >= 0) {
-                    verticalChange -= 1;
-                }
-            }
-        });
-
-        Button downButton = new Button("Move down");
-        downButton.setBounds(70, 560, 110,30);
-        downButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                if (pointOfView[3] + 100 <= 1000) {
-                    verticalChange += 1;
-                }
-            }
-        });
-
-        Button customization = new Button("Customization");
-        customization.setBounds(70, 700, 110,30);
-        customization.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                launchCustomization();
-            }
-        });
-
-        Button startButton = new Button("Start/Stop");
-        startButton.setBounds(70, 70, 110,30);
-        startButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                if (!start[0]) {
-                    start[0] = true;
-                    pause[0] = false;
-                    addStandardPlanets();
-                } else {
-                    start[0] = false;
-                    speed[0] = 10;
-                    pause[0] = true;
-                    systemTimeDays = 0;
-                    systemTimeMonths = 0;
-                    systemTimeYears = 0;
-                    allPlanets.clear();
-                }
-            }
-        });
-
-        buttons.add(startButton);
-
-        buttons.add(pauseButton);
-        buttons.add(speedX05);
-        buttons.add(speedX2);
-        buttons.add(speedNormal);
-
-        buttons.add(scaleDownButton);
-        buttons.add(scaleUpButton);
-        buttons.add(rightButton);
-        buttons.add(leftButton);
-        buttons.add(upButton);
-        buttons.add(downButton);
-        buttons.add(customization);
-
-        Thread.sleep(300);
-        jFrame.add(buttons);
-
-        launchApplication(jFrame);
     }
 
     //Everything connected to painting
