@@ -358,24 +358,38 @@ class ProgramInterface {
     }
 
     public static void repaint(JFrame jFrame){
-        jFrame.repaint(0, 0, 1200, 1000);
+        jFrame.repaint(0, 0, 1210, 1000);
     }
 
     //Command methods
-    public static void scaleUp(Graphics2D g2) {
+    public void scaleUp(Graphics2D g2) {
         g2.scale(2, 2);
     }
-    public static void right(Graphics2D g2) {
+    public void right(Graphics2D g2) {
         g2.translate(-100, 0);
     }
-    public static void down(Graphics2D g2) {
+    public void down(Graphics2D g2) {
         g2.translate(0, -100);
     }
 
-    //Everything connected to painting
-    public class MyComponent extends JComponent {
+    public void change(Graphics2D g2) {
+        ProgramLogic.change();
+        for (int i = 0; i < ProgramLogic.scaleChange; i++) {
+            ProgramLogic.scaleUp();
+            scaleUp(g2);
+        }
+        for (int i = 0; i < ProgramLogic.horizontalChange; i++) {
+            ProgramLogic.right();
+            right(g2);
+        }
+        for (int i = 0; i < ProgramLogic.verticalChange; i++) {
+            ProgramLogic.down();
+            down(g2);
+        }
+    }
 
-        //The painting
+    //The painting
+    public class MyComponent extends JComponent {
         @Override
         public void paint(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
@@ -392,32 +406,35 @@ class ProgramInterface {
 
             g2.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-            g2.drawString("Time from the start: " + (int) 10, 15, 20);
+            g2.drawString("Time from the start: " + (int) ProgramLogic.systemTimeSeconds + " seconds", 15, 20);
             g2.drawString("Ratio: 1 to 20 000 km", 15, 45);
+
+            change(g2);
 
             g2.setPaint(Color.yellow);
             Ellipse2D star = new Ellipse2D.Double(610, 435, 80, 80);
             g2.fill(star);
 
             g2.setColor(Color.WHITE);
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < ProgramLogic.allPlanets.size(); i++) {
                 Ellipse2D orbit = new Ellipse2D.Double(450 - i * 75, 400 - i * 75, 300 + i * 150, 150 + i * 150);
                 g2.draw(orbit);
             }
 
             g.setFont(new Font("TimesRoman", Font.PLAIN, 14));
-            SpaceObjects.Planet planet = new SpaceObjects.Planet(50, 1, Color.ORANGE);
+            for (SpaceObjects.Planet planet : ProgramLogic.allPlanets) {
                 g2.setColor(Color.WHITE);
                 g2.drawString("(" + (int) (planet.x + planet.size / 2) + ", " + (int) (planet.y + planet.size / 2) + ")",
                         (int) planet.x, (int) planet.y);
                 g2.setColor(planet.color);
                 Ellipse2D planetToDraw = new Ellipse2D.Double(planet.x, planet.y, planet.size, planet.size);
                 g2.fill(planetToDraw);
+            }
 
         }
     }
 
-    //Init method to create frame
+    //Init
     private void setUp() {
         jFrame.setTitle("PlanetSystem Simulator");
         jFrame.toFront();
@@ -432,68 +449,58 @@ class ProgramInterface {
 
 }
 
-
-
 class ProgramLogic {
-    ArrayList<SpaceObjects.Planet> allPlanets = new ArrayList<>();
-    public int[] pointOfView = {0, 0, 1400, 1000};
-    public int scaleChange = 0;
-    public int horizontalChange = 0;
-    public int verticalChange = 0;
+    static ArrayList<SpaceObjects.Planet> allPlanets = new ArrayList<>();
+    static public int[] pointOfView = {0, 0, 1400, 1000};
+    static public int scaleChange = 0;
+    static int horizontalChange = 0;
+    static int verticalChange = 0;
     public boolean[] pause = {false};
-    public double[] coefficientOfSpeed = {1};
+    private static final int CONST_OF_SPEED = 1;
+    public double[] coefficientOfSpeed = {CONST_OF_SPEED};
     public boolean[] start = {false};
-    private double systemTimeSecondsStart = LocalTime.now().toSecondOfDay();
-    private double systemTimeSeconds;
+    static public double systemTimeSecondsStart;
+    static public double systemTimeSeconds;
     public JFrame jFrame;
 
     //Run of the process
     public void launchApplication() {
         while (true) {
-            if (start[0]) systemTimeSeconds = LocalTime.now().toSecondOfDay() - systemTimeSecondsStart;
-            if (!pause[0]) {
-                for (int i = 0; i < allPlanets.size(); i++) {
-                    coordinates(allPlanets.get(i));
-                    allPlanets.get(i).angle += allPlanets.get(i).coefficientOfMass * coefficientOfSpeed[0] * 0.00005;
+            if (start[0]) {
+                systemTimeSeconds = LocalTime.now().toSecondOfDay() - systemTimeSecondsStart;
+                if (!pause[0]) {
+                    for (int i = 0; i < allPlanets.size(); i++) {
+                        coordinates(allPlanets.get(i));
+                        allPlanets.get(i).angle += allPlanets.get(i).coefficientOfMass * coefficientOfSpeed[0] * 0.00005;
+                    }
                 }
             }
-            change();
             ProgramInterface.repaint(jFrame);
         }
     }
 
-
-
-    void right() {
-        pointOfView[2] += 100;
-        pointOfView[0] += 100;
+    private void setUpTime() {
+        systemTimeSecondsStart = LocalTime.now().toSecondOfDay();
     }
-    void down() {
-        pointOfView[1] += 100;
-        pointOfView[3] += 100;
-    }
-    void scaleUp() {
-        for (int i = 0; i < pointOfView.length; i++) {
+
+    public static void scaleUp(){
+        for (int i = 0; i < ProgramLogic.pointOfView.length; i++) {
             pointOfView[i] /= 2;
         }
     }
-    public void change() {
+    public static void right(){
+        pointOfView[2] += 100;
+        pointOfView[0] += 100;
+    }
+    public static void down() {
+        pointOfView[1] += 100;
+        pointOfView[3] += 100;
+    }
+    public static void change() {
         pointOfView[0] = 0;
         pointOfView[1] = 0;
         pointOfView[2] = 1200;
         pointOfView[3] = 1000;
-        for (int i = 0; i < scaleChange; i++) {
-            ProgramInterface.scaleUp((Graphics2D) jFrame.getGraphics());
-            scaleUp();
-        }
-        for (int i = 0; i < horizontalChange; i++) {
-            ProgramInterface.right((Graphics2D) jFrame.getGraphics());
-            right();
-        }
-        for (int i = 0; i < verticalChange; i++) {
-            ProgramInterface.down((Graphics2D) jFrame.getGraphics());
-            down();
-        }
     }
 
     void pauseButton(){
@@ -506,10 +513,11 @@ class ProgramLogic {
         if (!start[0]) {
             start[0] = true;
             pause[0] = false;
+            setUpTime();
             addStandardPlanets();
         } else {
             start[0] = false;
-            coefficientOfSpeed[0] = 1;
+            coefficientOfSpeed[0] = CONST_OF_SPEED;
             pause[0] = true;
             systemTimeSecondsStart = LocalTime.now().toSecondOfDay();
             allPlanets.clear();
@@ -533,7 +541,8 @@ class ProgramLogic {
         verticalChange = 0;
         horizontalChange = 0;
         scaleChange = 0;
-        coefficientOfSpeed[0] = 1;
+        change();
+        coefficientOfSpeed[0] = CONST_OF_SPEED;
     }
 
     void scaleUpButton(){
@@ -575,7 +584,6 @@ class ProgramLogic {
     void customizeButton(){
         ProgramInterface.launchCustomization(allPlanets);
     }
-
 
     //Add 6 standard planets
     private void addStandardPlanets(){
