@@ -18,19 +18,24 @@ public class PlanetSystem {
     public static int horizontalChange = 0;
     public static int verticalChange = 0;
     public static boolean[] pause = {false};
-    public static int[] speed = {10};
+    public static double[] coefficientOfSpeed = {1};
     public static boolean[] start = {false};
     private static int systemTimeDays = 0;
     private static int systemTimeMonths = 0;
     private static int systemTimeYears = 0;
+    private static double systemTimeSeconds = 0;
+    public static JFrame jFrame = getFrame();
 
     public static void main(String[] args) throws InterruptedException {
        main();
     }
 
     public static void main() throws InterruptedException {
-        JFrame jFrame = getFrame();
+        addButtons();
+        launchApplication();
+    }
 
+    public static void addButtons() throws InterruptedException {
         JPanel buttons = new JPanel();
         buttons.setLocation(new Point(1200, 0));
         buttons.setSize(250, 1000);
@@ -53,7 +58,9 @@ public class PlanetSystem {
         speedX05.setBounds(10, 200, 110,30);
         speedX05.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (speed[0] < 100) speed[0] += 3;
+                System.out.println(coefficientOfSpeed[0]);
+                if (coefficientOfSpeed[0] > 1) coefficientOfSpeed[0] -= 1;
+                else if (coefficientOfSpeed[0] - 0.1 > 0 && coefficientOfSpeed[0] <= 1) coefficientOfSpeed[0] -= 0.05;
             }
         });
 
@@ -61,8 +68,8 @@ public class PlanetSystem {
         speedX2.setBounds(130, 200,110,30);
         speedX2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (speed[0] > 10 ) speed[0] -= speed[0] / 10;
-                else if (speed[0] > 1) speed[0] -= 1;
+                if (coefficientOfSpeed[0] > 1 && coefficientOfSpeed[0] < 15) coefficientOfSpeed[0] += 1;
+                else if (coefficientOfSpeed[0] <= 1) coefficientOfSpeed[0] += 0.2;
             }
         });
 
@@ -71,12 +78,12 @@ public class PlanetSystem {
         backToNormalButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 for (SpaceObjects.Planet planet: allPlanets) {
-                    planet.speedDivider = 1;
+                    planet.coefficientOfMass = 1;
                 }
                 verticalChange = 0;
                 horizontalChange = 0;
                 scaleChange = 0;
-                speed[0] = 10;
+                coefficientOfSpeed[0] = 1;
             }
         });
 
@@ -158,7 +165,7 @@ public class PlanetSystem {
                     addStandardPlanets();
                 } else {
                     start[0] = false;
-                    speed[0] = 10;
+                    coefficientOfSpeed[0] = 1;
                     pause[0] = true;
                     systemTimeDays = 0;
                     systemTimeMonths = 0;
@@ -185,8 +192,6 @@ public class PlanetSystem {
 
         Thread.sleep(300);
         jFrame.add(buttons);
-
-        launchApplication(jFrame);
     }
 
     //Add 6 standard planets
@@ -206,7 +211,7 @@ public class PlanetSystem {
 
     //Method to find coordinates x,y of a planet
     public static void coordinates(SpaceObjects.Planet planet) {
-        double psi = (planet.time * Math.PI / 180 / planet.remoteness);
+        double psi = (planet.angle * Math.PI / 180 / planet.remoteness);
         double fi = Math.atan2(planet.a * Math.sin(psi), planet.b * Math.cos(psi));
         planet.y = planet.a * Math.cos(fi) + 450 - planet.size / 2 + 25;
         planet.x = planet.b * Math.sin(fi) + 575 - planet.size / 2 + 25;
@@ -228,12 +233,12 @@ public class PlanetSystem {
 
             Label nameLabel = new Label("Planet # " + (finalI + 1));
             Label sizeLabel = new Label("Size:");
-            Label speedLabel = new Label("Speed:");
+            Label speedLabel = new Label("Mass:");
             Label colorLabel = new Label("Color:");
 
-            JSlider planetSliderOfSize = new JSlider(JSlider.HORIZONTAL, 1, 51, 2);
+            JSlider planetSliderOfSize = new JSlider(JSlider.HORIZONTAL, 1, 50, 2);
             {
-                planetSliderOfSize.setMajorTickSpacing(10);
+                planetSliderOfSize.setMajorTickSpacing(7);
                 planetSliderOfSize.setMinorTickSpacing(1);
                 planetSliderOfSize.setPaintTicks(true);
                 planetSliderOfSize.setPaintLabels(true);
@@ -249,19 +254,19 @@ public class PlanetSystem {
                 });
             }
 
-            JSlider planetSliderOfSpeed = new JSlider(JSlider.HORIZONTAL, -100, 100, 5);
+            JSlider planetSliderOfMass = new JSlider(JSlider.HORIZONTAL, 1, 10, 5);
             {
-                planetSliderOfSpeed.setMajorTickSpacing(50);
-                planetSliderOfSpeed.setMinorTickSpacing(1);
-                planetSliderOfSpeed.setValue(0);
-                planetSliderOfSpeed.setPaintTicks(true);
-                planetSliderOfSpeed.setPaintLabels(true);
-                planetSliderOfSpeed.addChangeListener(new ChangeListener() {
+                planetSliderOfMass.setMajorTickSpacing(3);
+                planetSliderOfMass.setMinorTickSpacing(1);
+                planetSliderOfMass.setValue(1);
+                planetSliderOfMass.setPaintTicks(true);
+                planetSliderOfMass.setPaintLabels(true);
+                planetSliderOfMass.addChangeListener(new ChangeListener() {
                     @Override
                     public void stateChanged(ChangeEvent e) {
                         JSlider source = (JSlider) e.getSource();
                         if (!source.getValueIsAdjusting() && allPlanets.size() > finalI)
-                            allPlanets.get(finalI).speedDivider = ((101 - source.getValue()) / 40.0);
+                            allPlanets.get(finalI).coefficientOfMass = 1.0 / source.getValue();
 
                     }
                 });
@@ -407,16 +412,16 @@ public class PlanetSystem {
             frame.add(sizeLabel);
             frame.add(planetSliderOfSize);
             frame.add(speedLabel);
-            frame.add(planetSliderOfSpeed);
+            frame.add(planetSliderOfMass);
             frame.add(colorLabel);
             frame.add(colorButton);
         }
     }
 
     //Run of the process
-    private static void launchApplication(JFrame jFrame) throws InterruptedException {
+    private static void launchApplication() throws InterruptedException {
         while (true) {
-
+            systemTimeSeconds += 0.015;
             if (!pause[0]) {
                 if (start[0]) {
                     if (systemTimeDays == 30) {
@@ -432,10 +437,10 @@ public class PlanetSystem {
                 }
                 for (SpaceObjects.Planet planet : allPlanets) {
                     coordinates(planet);
-                    planet.time += planet.speedDivider;
+                    planet.angle += planet.coefficientOfMass * coefficientOfSpeed[0];
                 }
 
-                Thread.sleep(speed[0]);
+                Thread.sleep(10);
             }
             jFrame.repaint(0, 0, 1210, 1000);
         }
@@ -462,6 +467,16 @@ public class PlanetSystem {
             pointOfView[3] += 100;
         }
 
+        private void change(Graphics2D g2){
+            pointOfView[0] = 0;
+            pointOfView[1] = 0;
+            pointOfView[2] = 1200;
+            pointOfView[3] = 1000;
+            for (int i = 0; i < scaleChange; i++) scaleUp(g2);
+            for (int i = 0; i < horizontalChange; i++) right(g2);
+            for (int i = 0; i < verticalChange; i++) down(g2);
+        }
+
         //The painting
         @Override
         public void paint(Graphics g) {
@@ -479,17 +494,10 @@ public class PlanetSystem {
 
             g2.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-            g2.drawString("Time from the start: " + systemTimeYears + " years, " + systemTimeMonths + " months",15, 20);
+            g2.drawString("Time from the start: " + (int) systemTimeSeconds,15, 20);
             g2.drawString("Ratio: 1 to 20 000 km", 15, 45);
 
-
-            pointOfView[0] = 0;
-            pointOfView[1] = 0;
-            pointOfView[2] = 1200;
-            pointOfView[3] = 1000;
-            for (int i = 0; i < scaleChange; i++) scaleUp(g2);
-            for (int i = 0; i < horizontalChange; i++) right(g2);
-            for (int i = 0; i < verticalChange; i++) down(g2);
+            change(g2);
 
             g2.setPaint(Color.yellow);
             Ellipse2D star = new Ellipse2D.Double(610, 435, 80, 80);
