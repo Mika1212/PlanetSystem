@@ -31,13 +31,10 @@ public class SpaceObjects {
         Color color;
 
         public Planet(int size, int remoteness, Color color) {
-            if (PlanetSystem.allPlanets.size() == 0) {
+
                 this.a = constA;
                 this.b = constB;
-            } else {
-                this.a = PlanetSystem.allPlanets.get(PlanetSystem.allPlanets.size() - 1).a + 75;
-                this.b = PlanetSystem.allPlanets.get(PlanetSystem.allPlanets.size() - 1).b + 75;
-            }
+
             this.size = size;
             this.remoteness = remoteness;
             this.coefficientOfMass = 1;
