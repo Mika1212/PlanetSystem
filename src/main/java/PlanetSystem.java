@@ -455,10 +455,10 @@ class ProgramLogic {
     static public int scaleChange = 0;
     static int horizontalChange = 0;
     static int verticalChange = 0;
-    public boolean[] pause = {false};
+    public static boolean[] pause = {false};
     private static final int CONST_OF_SPEED = 1;
-    public double[] coefficientOfSpeed = {CONST_OF_SPEED};
-    public boolean[] start = {false};
+    public static double[] coefficientOfSpeed = {CONST_OF_SPEED};
+    public static boolean[] start = {false};
     static public double systemTimeSecondsStart;
     static public double systemTimeSeconds;
     public JFrame jFrame;
@@ -601,10 +601,14 @@ class ProgramLogic {
     }
 
     //Method to find coordinates x,y of a planet
-    public void coordinates(SpaceObjects.Planet planet) {
+    public static void coordinates(SpaceObjects.Planet planet) {
         double psi = (planet.angle * Math.PI / 180 / planet.remoteness);
         double fi = Math.atan2(planet.a * Math.sin(psi), planet.b * Math.cos(psi));
         planet.y = planet.a * Math.cos(fi) + 450 - planet.size / 2 + 25;
         planet.x = planet.b * Math.sin(fi) + 575 - planet.size / 2 + 25;
+    }
+
+    public boolean getStart() {
+        return start[0];
     }
 }
