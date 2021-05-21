@@ -1,5 +1,6 @@
 # PlanetSystem simulator. 
-Simulator of planet systems. Implemented by AWT/Swing. 
+Implemented by AWT/Swing.
+
 Это приложение создано для проведения симуляций планетных систем. 
 Оно позволяет по желанию настраивать систему, менять планеты и их характеристики. 
 Для подтверждения работоспособности приведены тесты.
