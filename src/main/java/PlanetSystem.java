@@ -13,28 +13,35 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class PlanetSystem {
+    ProgramInterface programInterface;
+    ProgramLogic programLogic;
+
     public static void main(String[] args) throws InterruptedException {
-        main();
+        PlanetSystem planetSystem = new PlanetSystem(true);
     }
 
-    public static void main() throws InterruptedException {
-        ProgramLogic programLogic = new ProgramLogic();
-        ProgramInterface programInterface = new ProgramInterface(programLogic);
+    public void start() { programLogic.launchApplication(); }
+
+    public PlanetSystem(boolean test) throws InterruptedException {
+        programLogic = new ProgramLogic();
+        programInterface = new ProgramInterface(programLogic);
+        if (test) programLogic.launchApplication();
     }
 }
 
 class ProgramInterface {
     JFrame jFrame = new JFrame();
+    private final ProgramLogic programLogic;
 
 
     public ProgramInterface(ProgramLogic programLogic) throws InterruptedException {
+        this.programLogic = programLogic;
         this.setUp();
-        this.addButtons(programLogic);
-        programLogic.jFrame = jFrame;
-        programLogic.launchApplication();
+        this.addButtons();
+        programLogic.logicGetJFrame(jFrame);
     }
 
-    public void addButtons(ProgramLogic programLogic) throws InterruptedException {
+    public void addButtons() throws InterruptedException {
         JPanel buttons = new JPanel();
         buttons.setLocation(new Point(1200, 0));
         buttons.setSize(250, 1000);
@@ -45,7 +52,7 @@ class ProgramInterface {
         pauseButton.setBounds(70, 150, 110, 30);
         pauseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               programLogic.pauseButton();
+                programLogic.pauseButton();
             }
         });
 
@@ -53,7 +60,7 @@ class ProgramInterface {
         speedX05.setBounds(10, 200, 110, 30);
         speedX05.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               programLogic.slowerButton();
+                programLogic.slowerButton();
             }
         });
 
@@ -77,7 +84,7 @@ class ProgramInterface {
         scaleUpButton.setBounds(10, 400, 110, 30);
         scaleUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               programLogic.scaleUpButton();
+                programLogic.scaleUpButton();
             }
         });
 
@@ -373,17 +380,17 @@ class ProgramInterface {
     }
 
     public void change(Graphics2D g2) {
-        ProgramLogic.change();
-        for (int i = 0; i < ProgramLogic.scaleChange; i++) {
-            ProgramLogic.scaleUp();
+        programLogic.change();
+        for (int i = 0; i < programLogic.getScaleChange(); i++) {
+            programLogic.scaleUp();
             scaleUp(g2);
         }
-        for (int i = 0; i < ProgramLogic.horizontalChange; i++) {
-            ProgramLogic.right();
+        for (int i = 0; i < programLogic.getHorizontalChange(); i++) {
+            programLogic.right();
             right(g2);
         }
-        for (int i = 0; i < ProgramLogic.verticalChange; i++) {
-            ProgramLogic.down();
+        for (int i = 0; i < programLogic.getVerticalChange(); i++) {
+            programLogic.down();
             down(g2);
         }
     }
@@ -406,7 +413,7 @@ class ProgramInterface {
 
             g2.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-            g2.drawString("Time from the start: " + (int) ProgramLogic.systemTimeSeconds + " seconds", 15, 20);
+            g2.drawString("Time from the start: " + (int) programLogic.getSystemTimeSeconds() + " seconds", 15, 20);
             g2.drawString("Ratio: 1 to 20 000 km", 15, 45);
 
             change(g2);
@@ -416,13 +423,13 @@ class ProgramInterface {
             g2.fill(star);
 
             g2.setColor(Color.WHITE);
-            for (int i = 0; i < ProgramLogic.allPlanets.size(); i++) {
+            for (int i = 0; i < programLogic.getAllPlanets().size(); i++) {
                 Ellipse2D orbit = new Ellipse2D.Double(450 - i * 75, 400 - i * 75, 300 + i * 150, 150 + i * 150);
                 g2.draw(orbit);
             }
 
             g.setFont(new Font("TimesRoman", Font.PLAIN, 14));
-            for (SpaceObjects.Planet planet : ProgramLogic.allPlanets) {
+            for (SpaceObjects.Planet planet : programLogic.getAllPlanets()) {
                 g2.setColor(Color.WHITE);
                 g2.drawString("(" + (int) (planet.x + planet.size / 2) + ", " + (int) (planet.y + planet.size / 2) + ")",
                         (int) planet.x, (int) planet.y);
@@ -450,18 +457,22 @@ class ProgramInterface {
 }
 
 class ProgramLogic {
-    static ArrayList<SpaceObjects.Planet> allPlanets = new ArrayList<>();
-    static public int[] pointOfView = {0, 0, 1400, 1000};
-    static public int scaleChange = 0;
-    static int horizontalChange = 0;
-    static int verticalChange = 0;
-    public static boolean[] pause = {false};
+    private ArrayList<SpaceObjects.Planet> allPlanets = new ArrayList<>();
+    private int[] pointOfView = {0, 0, 1400, 1000};
+    private int scaleChange = 0;
+    private int horizontalChange = 0;
+    private int verticalChange = 0;
+    private boolean[] pause = {false};
     private static final int CONST_OF_SPEED = 1;
-    public static double[] coefficientOfSpeed = {CONST_OF_SPEED};
-    public static boolean[] start = {false};
-    static public double systemTimeSecondsStart;
-    static public double systemTimeSeconds;
-    public JFrame jFrame;
+    private double[] coefficientOfSpeed = {CONST_OF_SPEED};
+    private boolean[] start = {false};
+    private double systemTimeSecondsStart;
+    private double systemTimeSeconds;
+    private JFrame jFrame;
+
+    public void logicGetJFrame(JFrame jFrame) {
+        this.jFrame = jFrame;
+    }
 
     //Run of the process
     public void launchApplication() {
@@ -483,20 +494,20 @@ class ProgramLogic {
         systemTimeSecondsStart = LocalTime.now().toSecondOfDay();
     }
 
-    public static void scaleUp(){
-        for (int i = 0; i < ProgramLogic.pointOfView.length; i++) {
+    public void scaleUp(){
+        for (int i = 0; i < pointOfView.length; i++) {
             pointOfView[i] /= 2;
         }
     }
-    public static void right(){
+    public void right(){
         pointOfView[2] += 100;
         pointOfView[0] += 100;
     }
-    public static void down() {
+    public void down() {
         pointOfView[1] += 100;
         pointOfView[3] += 100;
     }
-    public static void change() {
+    public void change() {
         pointOfView[0] = 0;
         pointOfView[1] = 0;
         pointOfView[2] = 1200;
@@ -581,18 +592,18 @@ class ProgramLogic {
         }
     }
 
-    void customizeButton(){
+    public void customizeButton(){
         ProgramInterface.launchCustomization(allPlanets);
     }
 
     //Add 6 standard planets
     private void addStandardPlanets(){
-        addPlanet(new SpaceObjects.Planet(10, 1, Color.BLUE));
-        addPlanet(new SpaceObjects.Planet(20, 2, Color.ORANGE));
-        addPlanet(new SpaceObjects.Planet(30, 3, Color.PINK));
-        addPlanet(new SpaceObjects.Planet(40, 4, Color.CYAN));
-        addPlanet(new SpaceObjects.Planet(45, 5, Color.DARK_GRAY));
-        addPlanet(new SpaceObjects.Planet(50, 6, Color.GREEN));
+        addPlanet(new SpaceObjects.Planet(10, 1, Color.BLUE, 1));
+        addPlanet(new SpaceObjects.Planet(20, 2, Color.ORANGE, 2));
+        addPlanet(new SpaceObjects.Planet(30, 3, Color.PINK, 3));
+        addPlanet(new SpaceObjects.Planet(40, 4, Color.CYAN, 4));
+        addPlanet(new SpaceObjects.Planet(45, 5, Color.DARK_GRAY, 5));
+        addPlanet(new SpaceObjects.Planet(50, 6, Color.GREEN, 6));
     }
 
     //Add 1 planet
@@ -608,7 +619,16 @@ class ProgramLogic {
         planet.x = planet.b * Math.sin(fi) + 575 - planet.size / 2 + 25;
     }
 
-    public boolean getStart() {
-        return start[0];
-    }
+    public boolean getStart() { return start[0]; }
+
+    public boolean getPause() { return pause[0]; }
+
+    public double getCoefficientOfSpeed() { return coefficientOfSpeed[0]; }
+
+    public int getScaleChange() { return scaleChange; }
+    public int getVerticalChange() { return verticalChange; }
+    public int getHorizontalChange() { return horizontalChange; }
+    public double getSystemTimeSeconds() { return systemTimeSeconds; }
+    public double getSystemTimeSecondsStart() { return systemTimeSecondsStart; }
+    public ArrayList<SpaceObjects.Planet> getAllPlanets() { return allPlanets; }
 }

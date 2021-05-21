@@ -26,18 +26,15 @@ public class SpaceObjects {
         int b;
         int size;
         int remoteness;
+        int number;
         double angle;
         double coefficientOfMass;
         Color color;
 
-        public Planet(int size, int remoteness, Color color) {
-            if (ProgramLogic.allPlanets.size() == 0) {
-                this.a = constA;
-                this.b = constB;
-            } else {
-                this.a = ProgramLogic.allPlanets.get(ProgramLogic.allPlanets.size() - 1).a + 75;
-                this.b = ProgramLogic.allPlanets.get(ProgramLogic.allPlanets.size() - 1).b + 75;
-            }
+        public Planet(int size, int remoteness, Color color, int number) {
+            this.number = number;
+            this.a = constA * number;
+            this.b = this.a + 75;
             this.size = size;
             this.remoteness = remoteness;
             this.coefficientOfMass = 1;
