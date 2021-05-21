@@ -23,6 +23,22 @@ public class PlanetSystemTest {
     }
 
     @Test
+    public void testProgramLogic() {
+        ProgramLogic programLogic = new ProgramLogic();
+
+        programLogic.logicStart();
+        assertTrue(programLogic.getStart());
+        programLogic.logicPause();
+        assertTrue(programLogic.getPause());
+        programLogic.logicFaster();
+        assertEquals(programLogic.getCoefficientOfSpeed(), 1.1, 0.00000);
+        programLogic.logicSlower();
+        assertEquals(programLogic.getCoefficientOfSpeed(), 0.1, 0.00001);
+        programLogic.logicNormal();
+        assertEquals(programLogic.getCoefficientOfSpeed(), 1, 0.00000);
+    }
+
+    @Test
     public void testButtons() throws AWTException, InterruptedException {
 
         Thread thread = new Thread() {
@@ -42,7 +58,6 @@ public class PlanetSystemTest {
 
         Thread.sleep(1000);
         Robot robot = new Robot(graphicsDevice);
-
 
 
         //Start button
@@ -68,23 +83,23 @@ public class PlanetSystemTest {
         assertFalse(planetSystem.getProgramLogic().getPause());
 
         //Slower button
-        robot.mouseMove(1600 - 100,  230 + 40);
+        robot.mouseMove(1600 - 100, 230 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.getProgramLogic().getCoefficientOfSpeed(), 0.95, 0.000000);
+        assertEquals(planetSystem.getProgramLogic().getCoefficientOfSpeed(), 0.9, 0.000000);
 
         //Faster button
-        robot.mouseMove(1500 + 150,  230 + 40);
+        robot.mouseMove(1500 + 150, 230 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.getProgramLogic().getCoefficientOfSpeed(), 1.15, 0.000000);
+        assertEquals(planetSystem.getProgramLogic().getCoefficientOfSpeed(), 1.0, 0.000000);
 
         //Normal button
-        robot.mouseMove(1650 - 100,  330 + 40);
+        robot.mouseMove(1650 - 100, 330 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
@@ -92,55 +107,55 @@ public class PlanetSystemTest {
         assertEquals(planetSystem.getProgramLogic().getCoefficientOfSpeed(), 1, 0.00000);
 
         //ScaleUp button
-        robot.mouseMove(1550 - 50,  430 + 40);
+        robot.mouseMove(1550 - 50, 430 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.getProgramLogic().getScaleChange(), 1);
+        assertEquals(planetSystem.getProgramInterface().getScaleChange(), 1);
 
         //Left button
-        robot.mouseMove(1550 + 50,  550 + 40);
+        robot.mouseMove(1550 + 50, 550 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.getProgramLogic().getHorizontalChange(), 1);
+        assertEquals(planetSystem.getProgramInterface().getHorizontalChange(), 1);
 
         //Down button
-        robot.mouseMove(1550,  590 + 40);
+        robot.mouseMove(1550, 590 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.getProgramLogic().getVerticalChange(), 1);
+        assertEquals(planetSystem.getProgramInterface().getVerticalChange(), 1);
 
         //Left button
-        robot.mouseMove(1550 - 50,  550 + 40);
+        robot.mouseMove(1550 - 50, 550 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.getProgramLogic().getHorizontalChange(), 0);
+        assertEquals(planetSystem.getProgramInterface().getHorizontalChange(), 0);
 
         //Up button
-        robot.mouseMove(1550,  510 + 40);
+        robot.mouseMove(1550, 510 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.getProgramLogic().getVerticalChange(), 0);
+        assertEquals(planetSystem.getProgramInterface().getVerticalChange(), 0);
 
         //ScaleDown button
-        robot.mouseMove(1550 + 50,  430 + 40);
+        robot.mouseMove(1550 + 50, 430 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.getProgramLogic().getScaleChange(), 0);
+        assertEquals(planetSystem.getProgramInterface().getScaleChange(), 0);
 
         //Customize button
-        robot.mouseMove(1550 + 50,  730 + 40);
+        robot.mouseMove(1550 + 50, 730 + 40);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
@@ -165,11 +180,11 @@ public class PlanetSystemTest {
         assertEquals(planetSystem.getProgramLogic().getAllPlanets().get(0).coefficientOfMass, 0.2, 0.00000);
 
         //Colors
-        robot.mouseMove(1655,  105);
+        robot.mouseMove(1655, 105);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        robot.mouseMove(1695,  145);
+        robot.mouseMove(1695, 145);
         Thread.sleep(100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
