@@ -164,7 +164,6 @@ class ProgramInterface {
         buttons.add(downButton);
         buttons.add(customization);
 
-        Thread.sleep(300);
         jFrame.add(buttons);
     }
 
@@ -436,7 +435,7 @@ class ProgramInterface {
             }
 
             g.setFont(new Font("TimesRoman", Font.PLAIN, 14));
-            for (SpaceObjects.Planet planet : programLogic.getAllPlanets()) {
+            for (SpaceObjects.Planet planet: programLogic.getAllPlanets()) {
                 g2.setColor(Color.WHITE);
                 g2.drawString("(" + (int) (planet.x + planet.size / 2) + ", " + (int) (planet.y + planet.size / 2) + ")",
                         (int) planet.x, (int) planet.y);
