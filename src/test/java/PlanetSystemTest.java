@@ -28,7 +28,7 @@ public class PlanetSystemTest {
         Thread thread = new Thread() {
             public void run() {
                 try {
-                    planetSystem = new PlanetSystem(false);
+                    planetSystem = new PlanetSystem(true);
                     planetSystem.start();
                 } catch (InterruptedException e) {
                     e.printStackTrace();

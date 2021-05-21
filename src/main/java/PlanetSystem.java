@@ -17,15 +17,18 @@ public class PlanetSystem {
     ProgramLogic programLogic;
 
     public static void main(String[] args) throws InterruptedException {
-        PlanetSystem planetSystem = new PlanetSystem(true);
+        PlanetSystem planetSystem = new PlanetSystem(false);
     }
 
+    //For the tests
     public void start() { programLogic.launchApplication(); }
 
+    //Constructor of main class
+    //boolean test is for test
     public PlanetSystem(boolean test) throws InterruptedException {
         programLogic = new ProgramLogic();
         programInterface = new ProgramInterface(programLogic);
-        if (test) programLogic.launchApplication();
+        if (!test) programLogic.launchApplication();
     }
 }
 
@@ -33,7 +36,7 @@ class ProgramInterface {
     JFrame jFrame = new JFrame();
     private final ProgramLogic programLogic;
 
-
+    //Constructor
     public ProgramInterface(ProgramLogic programLogic) throws InterruptedException {
         this.programLogic = programLogic;
         this.setUp();
@@ -41,6 +44,7 @@ class ProgramInterface {
         programLogic.logicGetJFrame(jFrame);
     }
 
+    //Interface buttons
     public void addButtons() throws InterruptedException {
         JPanel buttons = new JPanel();
         buttons.setLocation(new Point(1200, 0));
@@ -364,6 +368,7 @@ class ProgramInterface {
         }
     }
 
+    //Static method to use in launchApplication
     public static void repaint(JFrame jFrame){
         jFrame.repaint(0, 0, 1210, 1000);
     }
@@ -379,6 +384,7 @@ class ProgramInterface {
         g2.translate(0, -100);
     }
 
+    //Method where is concentrated everything connected to screen view change
     public void change(Graphics2D g2) {
         programLogic.change();
         for (int i = 0; i < programLogic.getScaleChange(); i++) {
@@ -470,6 +476,7 @@ class ProgramLogic {
     private double systemTimeSeconds;
     private JFrame jFrame;
 
+    //Method to assign jFrame
     public void logicGetJFrame(JFrame jFrame) {
         this.jFrame = jFrame;
     }
@@ -490,10 +497,12 @@ class ProgramLogic {
         }
     }
 
+    //Method to find out what time is it
     private void setUpTime() {
         systemTimeSecondsStart = LocalTime.now().toSecondOfDay();
     }
 
+    //Screen scale and move
     public void scaleUp(){
         for (int i = 0; i < pointOfView.length; i++) {
             pointOfView[i] /= 2;
@@ -514,12 +523,12 @@ class ProgramLogic {
         pointOfView[3] = 1000;
     }
 
+    //Buttons
     void pauseButton(){
         if (pause[0] && start[0])
             pause[0] = false;
         else pause[0] = true;
     }
-
     void startButton(){
         if (!start[0]) {
             start[0] = true;
@@ -534,17 +543,14 @@ class ProgramLogic {
             allPlanets.clear();
         }
     }
-
     void slowerButton(){
         if (coefficientOfSpeed[0] > 1) coefficientOfSpeed[0] -= 1;
         else if (coefficientOfSpeed[0] - 0.1 > 0 && coefficientOfSpeed[0] <= 1) coefficientOfSpeed[0] -= 0.05;
     }
-
     void fasterButton(){
         if (coefficientOfSpeed[0] > 1 && coefficientOfSpeed[0] < 15) coefficientOfSpeed[0] += 1;
         else if (coefficientOfSpeed[0] <= 1) coefficientOfSpeed[0] += 0.2;
     }
-
     void normalButton(){
         for (SpaceObjects.Planet planet : allPlanets) {
             planet.coefficientOfMass = 1;
@@ -555,11 +561,9 @@ class ProgramLogic {
         change();
         coefficientOfSpeed[0] = CONST_OF_SPEED;
     }
-
     void scaleUpButton(){
         scaleChange += 1;
     }
-
     void scaleDownButton(){
         if (scaleChange == 1) {
             scaleChange = 0;
@@ -567,31 +571,28 @@ class ProgramLogic {
             verticalChange = 0;
         } else if (scaleChange > 0) scaleChange -= 1;
     }
-
     void leftButton(){
         if (pointOfView[0] - 100 >= 0) {
             horizontalChange -= 1;
         }
     }
-
     void upButton(){
         if (pointOfView[1] - 100 >= 0) {
             verticalChange -= 1;
         }
     }
-
     void rightButton(){
         if (pointOfView[2] + 100 <= 1200) {
             horizontalChange += 1;
         }
     }
-
     void downButton(){
         if (pointOfView[3] + 100 <= 1000) {
             verticalChange += 1;
         }
     }
 
+    //Launching customization
     public void customizeButton(){
         ProgramInterface.launchCustomization(allPlanets);
     }
@@ -619,16 +620,13 @@ class ProgramLogic {
         planet.x = planet.b * Math.sin(fi) + 575 - planet.size / 2 + 25;
     }
 
+    //Getters of info
     public boolean getStart() { return start[0]; }
-
     public boolean getPause() { return pause[0]; }
-
     public double getCoefficientOfSpeed() { return coefficientOfSpeed[0]; }
-
     public int getScaleChange() { return scaleChange; }
     public int getVerticalChange() { return verticalChange; }
     public int getHorizontalChange() { return horizontalChange; }
     public double getSystemTimeSeconds() { return systemTimeSeconds; }
-    public double getSystemTimeSecondsStart() { return systemTimeSecondsStart; }
     public ArrayList<SpaceObjects.Planet> getAllPlanets() { return allPlanets; }
 }
