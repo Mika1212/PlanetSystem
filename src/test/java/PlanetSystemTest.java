@@ -51,7 +51,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertTrue(planetSystem.programLogic.getStart());
+        assertTrue(planetSystem.getProgramLogic().getStart());
 
         //Pause button
         robot.mouseMove(1600, 140 + 90);
@@ -59,13 +59,13 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertTrue(planetSystem.programLogic.getPause());
+        assertTrue(planetSystem.getProgramLogic().getPause());
 
         //Play
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertFalse(planetSystem.programLogic.getPause());
+        assertFalse(planetSystem.getProgramLogic().getPause());
 
         //Slower button
         robot.mouseMove(1600 - 100,  230 + 40);
@@ -73,7 +73,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getCoefficientOfSpeed(), 0.95, 0.000000);
+        assertEquals(planetSystem.getProgramLogic().getCoefficientOfSpeed(), 0.95, 0.000000);
 
         //Faster button
         robot.mouseMove(1500 + 150,  230 + 40);
@@ -81,7 +81,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getCoefficientOfSpeed(), 1.15, 0.000000);
+        assertEquals(planetSystem.getProgramLogic().getCoefficientOfSpeed(), 1.15, 0.000000);
 
         //Normal button
         robot.mouseMove(1650 - 100,  330 + 40);
@@ -89,7 +89,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getCoefficientOfSpeed(), 1, 0.00000);
+        assertEquals(planetSystem.getProgramLogic().getCoefficientOfSpeed(), 1, 0.00000);
 
         //ScaleUp button
         robot.mouseMove(1550 - 50,  430 + 40);
@@ -97,7 +97,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getScaleChange(), 1);
+        assertEquals(planetSystem.getProgramLogic().getScaleChange(), 1);
 
         //Left button
         robot.mouseMove(1550 + 50,  550 + 40);
@@ -105,7 +105,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getHorizontalChange(), 1);
+        assertEquals(planetSystem.getProgramLogic().getHorizontalChange(), 1);
 
         //Down button
         robot.mouseMove(1550,  590 + 40);
@@ -113,7 +113,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getVerticalChange(), 1);
+        assertEquals(planetSystem.getProgramLogic().getVerticalChange(), 1);
 
         //Left button
         robot.mouseMove(1550 - 50,  550 + 40);
@@ -121,7 +121,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getHorizontalChange(), 0);
+        assertEquals(planetSystem.getProgramLogic().getHorizontalChange(), 0);
 
         //Up button
         robot.mouseMove(1550,  510 + 40);
@@ -129,7 +129,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getVerticalChange(), 0);
+        assertEquals(planetSystem.getProgramLogic().getVerticalChange(), 0);
 
         //ScaleDown button
         robot.mouseMove(1550 + 50,  430 + 40);
@@ -137,7 +137,7 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getScaleChange(), 0);
+        assertEquals(planetSystem.getProgramLogic().getScaleChange(), 0);
 
         //Customize button
         robot.mouseMove(1550 + 50,  730 + 40);
@@ -150,7 +150,7 @@ public class PlanetSystemTest {
         robot.mouseMove(1200, 100);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(500);
-        assertEquals(planetSystem.programLogic.getAllPlanets().get(0).size, 23);
+        assertEquals(planetSystem.getProgramLogic().getAllPlanets().get(0).size, 23);
         Thread.sleep(100);
 
 
@@ -162,7 +162,7 @@ public class PlanetSystemTest {
         Thread.sleep(100);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(100);
-        assertEquals(planetSystem.programLogic.getAllPlanets().get(0).coefficientOfMass, 0.2, 0.00000);
+        assertEquals(planetSystem.getProgramLogic().getAllPlanets().get(0).coefficientOfMass, 0.2, 0.00000);
 
         //Colors
         robot.mouseMove(1655,  105);
@@ -174,6 +174,6 @@ public class PlanetSystemTest {
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         Thread.sleep(500);
-        assertEquals(planetSystem.programLogic.getAllPlanets().get(0).color, Color.WHITE);
+        assertEquals(planetSystem.getProgramLogic().getAllPlanets().get(0).color, Color.WHITE);
     }
 }

@@ -13,8 +13,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class PlanetSystem {
-    ProgramInterface programInterface;
-    ProgramLogic programLogic;
+    private ProgramInterface programInterface;
+    private ProgramLogic programLogic;
 
     public static void main(String[] args) throws InterruptedException {
         PlanetSystem planetSystem = new PlanetSystem(false);
@@ -30,6 +30,8 @@ public class PlanetSystem {
         programInterface = new ProgramInterface(programLogic);
         if (!test) programLogic.launchApplication();
     }
+
+    public ProgramLogic getProgramLogic() { return programLogic; }
 }
 
 class ProgramInterface {
