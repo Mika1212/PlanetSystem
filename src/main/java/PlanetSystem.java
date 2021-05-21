@@ -46,7 +46,7 @@ class ProgramInterface {
     }
 
     //Interface buttons
-    public void addButtons() throws InterruptedException {
+    private void addButtons() throws InterruptedException {
         JPanel buttons = new JPanel();
         buttons.setLocation(new Point(1200, 0));
         buttons.setSize(250, 1000);
@@ -375,18 +375,18 @@ class ProgramInterface {
     }
 
     //Command methods
-    public void scaleUp(Graphics2D g2) {
+    private void scaleUp(Graphics2D g2) {
         g2.scale(2, 2);
     }
-    public void right(Graphics2D g2) {
+    private void right(Graphics2D g2) {
         g2.translate(-100, 0);
     }
-    public void down(Graphics2D g2) {
+    private void down(Graphics2D g2) {
         g2.translate(0, -100);
     }
 
     //Method where is concentrated everything connected to screen view change
-    public void change(Graphics2D g2) {
+    private void change(Graphics2D g2) {
         programLogic.change();
         for (int i = 0; i < programLogic.getScaleChange(); i++) {
             programLogic.scaleUp();
@@ -403,7 +403,7 @@ class ProgramInterface {
     }
 
     //The painting
-    public class MyComponent extends JComponent {
+    private class MyComponent extends JComponent {
         @Override
         public void paint(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
@@ -525,12 +525,12 @@ class ProgramLogic {
     }
 
     //Buttons
-    void pauseButton(){
+    /*Package private*/ void pauseButton(){
         if (pause[0] && start[0])
             pause[0] = false;
         else pause[0] = true;
     }
-    void startButton(){
+    /*Package private*/ void startButton(){
         if (!start[0]) {
             start[0] = true;
             pause[0] = false;
@@ -544,15 +544,15 @@ class ProgramLogic {
             allPlanets.clear();
         }
     }
-    void slowerButton(){
+    /*Package private*/  void slowerButton(){
         if (coefficientOfSpeed[0] > 1) coefficientOfSpeed[0] -= 1;
         else if (coefficientOfSpeed[0] - 0.1 > 0 && coefficientOfSpeed[0] <= 1) coefficientOfSpeed[0] -= 0.05;
     }
-    void fasterButton(){
+    /*Package private*/ void fasterButton(){
         if (coefficientOfSpeed[0] > 1 && coefficientOfSpeed[0] < 15) coefficientOfSpeed[0] += 1;
         else if (coefficientOfSpeed[0] <= 1) coefficientOfSpeed[0] += 0.2;
     }
-    void normalButton(){
+    /*Package private*/ void normalButton(){
         for (SpaceObjects.Planet planet : allPlanets) {
             planet.coefficientOfMass = 1;
         }
@@ -562,39 +562,39 @@ class ProgramLogic {
         change();
         coefficientOfSpeed[0] = CONST_OF_SPEED;
     }
-    void scaleUpButton(){
+    /*Package private*/ void scaleUpButton(){
         scaleChange += 1;
     }
-    void scaleDownButton(){
+    /*Package private*/ void scaleDownButton(){
         if (scaleChange == 1) {
             scaleChange = 0;
             horizontalChange = 0;
             verticalChange = 0;
         } else if (scaleChange > 0) scaleChange -= 1;
     }
-    void leftButton(){
+    /*Package private*/ void leftButton(){
         if (pointOfView[0] - 100 >= 0) {
             horizontalChange -= 1;
         }
     }
-    void upButton(){
+    /*Package private*/ void upButton(){
         if (pointOfView[1] - 100 >= 0) {
             verticalChange -= 1;
         }
     }
-    void rightButton(){
+    /*Package private*/ void rightButton(){
         if (pointOfView[2] + 100 <= 1200) {
             horizontalChange += 1;
         }
     }
-    void downButton(){
+    /*Package private*/ void downButton(){
         if (pointOfView[3] + 100 <= 1000) {
             verticalChange += 1;
         }
     }
 
     //Launching customization
-    public void customizeButton(){
+    void customizeButton(){
         ProgramInterface.launchCustomization(allPlanets);
     }
 
