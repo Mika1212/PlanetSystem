@@ -164,6 +164,7 @@ class ProgramInterface {
         buttons.add(downButton);
         buttons.add(customization);
 
+        Thread.sleep(300);
         jFrame.add(buttons);
     }
 
