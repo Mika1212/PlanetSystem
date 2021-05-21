@@ -13,8 +13,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class PlanetSystem {
-    private ProgramInterface programInterface;
-    private ProgramLogic programLogic;
+    private final ProgramLogic programLogic;
 
     public static void main(String[] args) throws InterruptedException {
         PlanetSystem planetSystem = new PlanetSystem(false);
@@ -27,7 +26,7 @@ public class PlanetSystem {
     //boolean test is for test
     public PlanetSystem(boolean test) throws InterruptedException {
         programLogic = new ProgramLogic();
-        programInterface = new ProgramInterface(programLogic);
+        ProgramInterface programInterface = new ProgramInterface(programLogic);
         if (!test) programLogic.launchApplication();
     }
 
