@@ -13,4 +13,4 @@ https://ru.wikipedia.org/wiki/Законы_Кеплера
 https://ru.wikipedia.org/wiki/Гелиоцентрическая_орбита
 
 
-https://user-images.githubusercontent.com/54846851/119175053-0baf2d80-ba72-11eb-9623-4289522a2132.mp4
+https://user-images.githubusercontent.com/54846851/119224357-b07b4a80-bb06-11eb-937c-45a421d9d12a.mp4
