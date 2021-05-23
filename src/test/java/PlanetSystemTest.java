@@ -9,7 +9,7 @@ public class PlanetSystemTest {
     PlanetSystem planetSystem;
 
     @Test
-    public void dataTest() {
+    public void testData() {
         SpaceObjects.Planet planet = new SpaceObjects.Planet(50, 1, Color.ORANGE, 1);
         ProgramLogic.coordinates(planet);
         assertEquals(planet.x, 575.0, 0.0000);
